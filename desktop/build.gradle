@@ -10,7 +10,6 @@ repositories {
 }
 
 group 'kadiary'
-version '0.3.1'
 
 buildConfig {
   sourceSets {

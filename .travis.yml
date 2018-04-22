@@ -7,7 +7,7 @@ matrix:
       deploy:
         provider: releases
         api_key: ${GITHUB_API_KEY}
-        file: "desktop/build/libs/desktop-1.0.jar"
+        file: "desktop/build/libs/desktop.jar"
         skip_cleanup: true
         on:
           all_branches: true

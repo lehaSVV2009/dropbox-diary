@@ -1,3 +1,4 @@
+// Plugin to generate BuildConfig.java
 plugins {
   id 'de.fuerstenau.buildconfig' version '1.1.8'
 }
@@ -11,6 +12,8 @@ repositories {
 
 group 'kadiary'
 
+// Generate BuildConfig.java with final constants like DROPBOX_CLIENT_ID
+// Constants can be set by CI system variables
 buildConfig {
   sourceSets {
     main {
@@ -18,11 +21,12 @@ buildConfig {
       packageName = project.group  // sets the package of the BuildConfig class,
       buildConfigField 'String', 'DROPBOX_CLIENT_ID', System.getenv("DROPBOX_CLIENT_ID") ?: "client-id"
       buildConfigField 'String', 'DROPBOX_ACCESS_TOKEN', System.getenv("DROPBOX_ACCESS_TOKEN") ?: "client-secret"
-      buildConfigField 'String', 'DIARY_PATH', System.getenv("DROPBOX_ACCESS_TOKEN") ?: "/diary.xml"
+      buildConfigField 'String', 'DIARY_PATH', System.getenv("DIARY_PATH") ?: "/diary.xml"
     }
   }
 }
 
+// Generate fat jar with dropbox client library inside
 jar {
   manifest {
     attributes 'Main-Class': 'kadiary.Main'
@@ -34,5 +38,4 @@ jar {
 
 dependencies {
   compile 'com.dropbox.core:dropbox-core-sdk:2.1.1'
-  testCompile 'junit:junit:4.12'
 }

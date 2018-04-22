@@ -4,8 +4,6 @@ Simple UI projects (Desktop and Mobile) to add text notes to a single diary text
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
 1. Create Dropbox developer app [here](https://www.dropbox.com/developers/apps/create) (e.g. `MyDiary`)

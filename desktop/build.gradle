@@ -1,0 +1,39 @@
+plugins {
+  id 'de.fuerstenau.buildconfig' version '1.1.8'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+  mavenCentral()
+}
+
+group 'kadiary'
+version '0.3.1'
+
+buildConfig {
+  sourceSets {
+    main {
+      clsName = 'BuildConfig'      // sets the name of the BuildConfig class
+      packageName = project.group  // sets the package of the BuildConfig class,
+      buildConfigField 'String', 'DROPBOX_CLIENT_ID', System.getenv("DROPBOX_CLIENT_ID") ?: "client-id"
+      buildConfigField 'String', 'DROPBOX_ACCESS_TOKEN', System.getenv("DROPBOX_ACCESS_TOKEN") ?: "client-secret"
+      buildConfigField 'String', 'DIARY_PATH', System.getenv("DROPBOX_ACCESS_TOKEN") ?: "/diary.xml"
+    }
+  }
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': 'kadiary.Main'
+  }
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
+dependencies {
+  compile 'com.dropbox.core:dropbox-core-sdk:2.1.1'
+  testCompile 'junit:junit:4.12'
+}

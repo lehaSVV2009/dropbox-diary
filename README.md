@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-1. Create Dropbox developer app (e.g. `MyDiary`)
+1. Create Dropbox developer app [here](https://www.dropbox.com/developers/apps/create) (e.g. `MyDiary`)
 
 2. Obtain access token
 
@@ -58,15 +58,15 @@ git push origin master
 
 ## Contributing
 
-Do you what you want and have fun :smile:
+Do what you want and have fun :smile:
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/lehaSVV2009/dropbox-diary/tags). 
 
 ## Authors
 
-* **Alex Soroka** - [PurpleBooth](https://github.com/lehaSVV2009/resume)
+* [**Alex Soroka**](https://github.com/lehaSVV2009/resume)
 
 ## License
 

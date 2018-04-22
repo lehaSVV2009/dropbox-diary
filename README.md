@@ -20,7 +20,7 @@ Simple UI projects (Desktop and Mobile) to add text notes to a single diary text
 
 ### Installing JavaFX app
 
-1. Build the project
+1. Build JAR file (or download it from [releases](https://github.com/lehaSVV2009/dropbox-diary/releases))
 
 ```
 ./gradlew build

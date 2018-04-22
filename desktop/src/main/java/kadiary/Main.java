@@ -1,8 +1,8 @@
 package kadiary;
 
-import static kadiary.BuildConfig.DIARY_PATH;
-import static kadiary.BuildConfig.DROPBOX_ACCESS_TOKEN;
-import static kadiary.BuildConfig.DROPBOX_CLIENT_ID;
+import static kadiary.BuildConfig.DEFAULT_DIARY_PATH;
+import static kadiary.BuildConfig.DEFAULT_DROPBOX_ACCESS_TOKEN;
+import static kadiary.BuildConfig.DEFAULT_DROPBOX_CLIENT_ID;
 
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
@@ -22,6 +22,10 @@ import java.time.LocalDateTime;
 
 public class Main extends Application {
 
+  private static final String DROPBOX_CLIENT_ID = System.getProperty("dropbox-client-id", DEFAULT_DROPBOX_CLIENT_ID);
+  private static final String DROPBOX_ACCESS_TOKEN = System.getProperty("dropbox-access-token", DEFAULT_DROPBOX_ACCESS_TOKEN);
+  private static final String DIARY_PATH = System.getProperty("diary-path", DEFAULT_DIARY_PATH);
+
   public static void main(String args[]) throws Exception {
     launch(args);
   }
@@ -38,7 +42,7 @@ public class Main extends Application {
       try {
         Main.updateInDropBox(event);
       } catch (Exception e) {
-        new Alert(Alert.AlertType.ERROR, e.getMessage());
+        new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
       }
     });
 

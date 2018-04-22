@@ -19,9 +19,9 @@ buildConfig {
     main {
       clsName = 'BuildConfig'      // sets the name of the BuildConfig class
       packageName = project.group  // sets the package of the BuildConfig class,
-      buildConfigField 'String', 'DROPBOX_CLIENT_ID', System.getenv("DROPBOX_CLIENT_ID") ?: "client-id"
-      buildConfigField 'String', 'DROPBOX_ACCESS_TOKEN', System.getenv("DROPBOX_ACCESS_TOKEN") ?: "client-secret"
-      buildConfigField 'String', 'DIARY_PATH', System.getenv("DIARY_PATH") ?: "/diary.xml"
+      buildConfigField 'String', 'DEFAULT_DROPBOX_CLIENT_ID', System.getenv("DROPBOX_CLIENT_ID") ?: "client-id"
+      buildConfigField 'String', 'DEFAULT_DROPBOX_ACCESS_TOKEN', System.getenv("DROPBOX_ACCESS_TOKEN") ?: "client-secret"
+      buildConfigField 'String', 'DEFAULT_DIARY_PATH', System.getenv("DIARY_PATH") ?: "/diary.xml"
     }
   }
 }

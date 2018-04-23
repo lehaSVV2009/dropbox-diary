@@ -31,6 +31,9 @@ hs_err_pid*
 *.iml
 *.ipr
 
+# expo
+.expo/
+
 # dependencies
 */node_modules/*
 */build/*

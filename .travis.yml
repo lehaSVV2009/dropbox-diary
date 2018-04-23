@@ -7,7 +7,7 @@ matrix:
       deploy:
         provider: releases
         api_key: ${GITHUB_API_KEY}
-        file: "desktop/build/libs/desktop.jar"
+        file: "dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar"
         skip_cleanup: true
         on:
           all_branches: true

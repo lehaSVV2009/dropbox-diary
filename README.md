@@ -33,7 +33,7 @@ java \
 -Ddropbox-client-id=my-dropbox-app-id \
 -Ddropbox-access-token=my-access-token \
 -Ddiary-path=/diary.xml \
--jar desktop/build/libs/desktop.jar
+-jar dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar
 ```
 
 TODO [Little demo](little-demo.png)

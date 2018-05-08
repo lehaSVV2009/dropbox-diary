@@ -1,72 +1,43 @@
 import React from "react";
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
-} from "react-native";
+import { GiftedChat } from "react-native-gifted-chat";
 
 export default class App extends React.Component {
   state = {
-    text: ""
+    messages: [],
   }
 
-  handleChangeText = text => this.setState({ text });
-  handleCancel = () => {
-    // TODO close the app
+  componentWillMount() {
+    this.setState({
+      messages: [
+        {
+          _id: 1,
+          text: "Hello developer",
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: "React Native",
+            avatar: "https://placeimg.com/140/140/any",
+          },
+        },
+      ],
+    })
   }
-  handleOk = () => {
-    // TODO save to dropbox
+
+  onSend(messages = []) {
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, messages),
+    }))
   }
 
   render() {
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <Text>What did you do yesterday?</Text>
-          <View style={styles.textArea}>
-            <TextInput
-              multiline
-              placeholder="No time..."
-              value={this.state.text}
-              onChangeText={this.handleChangeText}
-            />
-          </View>
-          <View style={styles.buttonsBar}>
-            <Button
-              color="grey"
-              title="Cancel"
-              onPress={this.handleCancel}
-            />
-            <Button
-              color="blue"
-              title="Ok"
-              onPress={this.handleOk}
-            />
-          </View>
-        </View>
-      </ScrollView>
-    );
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+      />
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    marginTop: 50,
-    marginBottom: 275
-  },
-  textArea: {
-    borderBottomColor: "#000000",
-    borderBottomWidth: 1,
-    width: "90%",
-    padding: 5
-  },
-  buttonsBar: {
-    flexDirection: "row"
-  }
-});

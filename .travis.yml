@@ -10,8 +10,8 @@ matrix:
     deploy:
     - provider: gae
       project: kadiary
-      keyfile: "dropbox-diary-api/client-secret.json"
-      config: "dropbox-diary-api/app.yml"
+      keyfile: dropbox-diary-api/client-secret.json
+      config: dropbox-diary-api/app.yml
       skip_cleanup: true
       on:
         all_branches: true

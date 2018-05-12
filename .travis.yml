@@ -1,41 +1,24 @@
+before_install:
+- openssl aes-256-cbc -K $encrypted_5005aee41fbb_key -iv $encrypted_5005aee41fbb_iv
+  -in dropbox-diary-api/client-secret.json.enc -out dropbox-diary-api/client-secret.json -d
 matrix:
   include:
-    - language: java
-      jdk: oraclejdk8
-      before_install:
-        # escape characters in all env variables
-        - source ./travis-env.sh
-      script:
-        - ./gradlew clean build
-
-        #
-        # Deploy dropbox-diary-api to GCP
-        #
-        - cd dropbox-diary-api
-        # Download and install GAE client
-        - curl -o /tmp/google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-189.0.0-linux-x86_64.tar.gz
-        - tar -xvf /tmp/google-cloud-sdk.tar.gz -C /tmp/
-        - /tmp/google-cloud-sdk/install.sh -q
-        - source /tmp/google-cloud-sdk/path.bash.inc
-
-        # Login to GAE
-        - echo $GOOGLE_CLIENT_SECRET
-        - echo $GOOGLE_CLIENT_SECRET > client-secret.json
-        - cat client-secret.json
-        - gcloud auth activate-service-account --key-file client-secret.json
-
-        # Deploy app to GAE
-        - gcloud --quiet --verbosity=error app deploy app.yml --no-promote --version=test
-        - cd ..
-
-      #
-      # Deploy dropbox-diary-dekstop.jar to github releases
-      #
-      deploy:
-        provider: releases
-        api_key: ${GITHUB_API_KEY}
-        file: "dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar"
-        skip_cleanup: true
-        on:
-          all_branches: true
-          tags: true
+  - language: java
+    jdk: oraclejdk8
+    script:
+    - "./gradlew clean build"
+    deploy:
+    - provider: gae
+      project: kadiary
+      keyfile: "dropbox-diary-api/client-secret.json"
+      config: "dropbox-diary-api/app.yml"
+      skip_cleanup: true
+      on:
+        all_branches: true
+    - provider: releases
+      api_key: "${GITHUB_API_KEY}"
+      file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar
+      skip_cleanup: true
+      on:
+        all_branches: true
+        tags: true

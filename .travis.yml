@@ -2,6 +2,9 @@ matrix:
   include:
     - language: java
       jdk: oraclejdk8
+      before_install:
+        # escape characters in all env variables
+        - source ./travis-env.sh
       script:
         - ./gradlew clean build
 

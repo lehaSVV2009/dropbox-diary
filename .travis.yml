@@ -16,7 +16,9 @@ matrix:
         - source /tmp/google-cloud-sdk/path.bash.inc
 
         # Login to GAE
-        - echo ${GOOGLE_CLIENT_SECRET} > client-secret.json
+        - echo $GOOGLE_CLIENT_SECRET
+        - echo $GOOGLE_CLIENT_SECRET > client-secret.json
+        - cat client-secret.json
         - gcloud auth activate-service-account --key-file client-secret.json
 
         # Deploy app to GAE

@@ -1,0 +1,4 @@
+runtime: custom
+env: flex
+env_variables:
+   MONGO_URL: ${MONGO_URL}

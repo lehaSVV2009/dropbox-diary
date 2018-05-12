@@ -9,7 +9,7 @@ matrix:
     - "./gradlew clean build"
     deploy:
     - provider: gae
-      project: kadiary
+      project: kadiary-203913
       keyfile: dropbox-diary-api/gae/client-secret.json
       config: dropbox-diary-api/app.yml
       skip_cleanup: true

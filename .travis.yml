@@ -1,6 +1,6 @@
 before_install:
 - openssl aes-256-cbc -K $encrypted_5005aee41fbb_key -iv $encrypted_5005aee41fbb_iv
-  -in dropbox-diary-api/client-secret.json.enc -out dropbox-diary-api/client-secret.json -d
+  -in dropbox-diary-api/gae/client-secret.json.enc -out dropbox-diary-api/gae/client-secret.json -d
 matrix:
   include:
   - language: java
@@ -10,7 +10,7 @@ matrix:
     deploy:
     - provider: gae
       project: kadiary
-      keyfile: dropbox-diary-api/client-secret.json
+      keyfile: dropbox-diary-api/gae/client-secret.json
       config: dropbox-diary-api/app.yml
       skip_cleanup: true
       on:

@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: on-failure
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: echo 'db.stats().ok' | mongo localhost:27017/kadiary --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    command: mongod --smallfiles
+
+  api:
+    container_name: api
+    build: .
+    restart: on-failure
+    links:
+      - mongodb:mongodb
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGO_URL=mongodb/kadiary

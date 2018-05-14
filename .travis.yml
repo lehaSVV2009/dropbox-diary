@@ -13,6 +13,7 @@ matrix:
     deploy:
     - provider: script
       script: bash dropbox-diary-api/heroku_deploy
+      skip_cleanup: true
       on:
         branch: master
     - provider: releases

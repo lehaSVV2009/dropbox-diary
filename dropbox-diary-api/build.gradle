@@ -65,5 +65,3 @@ task generateGaeConfigs(type: Copy) {
 	rename { String fileName -> 'app.yml' }
 	expand(MONGO_URL: System.getenv('MONGO_URL') ?: 'localhost/kadiary')
 }
-
-processResources.dependsOn(generateGaeConfigs)

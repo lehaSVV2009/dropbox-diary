@@ -1,3 +1,6 @@
+sudo: required
+services:
+- docker
 before_install:
 - openssl aes-256-cbc -K $encrypted_5005aee41fbb_key -iv $encrypted_5005aee41fbb_iv
   -in dropbox-diary-api/gae/client-secret.json.enc -out dropbox-diary-api/gae/client-secret.json -d
@@ -8,13 +11,10 @@ matrix:
     script:
     - "./gradlew clean build"
     deploy:
-    - provider: gae
-      project: kadiary-203913
-      keyfile: dropbox-diary-api/gae/client-secret.json
-      config: dropbox-diary-api/app.yml
-      skip_cleanup: true
+    - provider: script
+      script: bash dropbox-diary-api/heroku_deploy
       on:
-        all_branches: true
+        branch: master
     - provider: releases
       api_key: "${GITHUB_API_KEY}"
       file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar

@@ -12,7 +12,7 @@ matrix:
     - "./gradlew clean build"
     deploy:
     - provider: script
-      script: bash dropbox-diary-api/heroku_deploy
+      script: bash ./dropbox-diary-api/heroku_deploy.sh
       skip_cleanup: true
       on:
         branch: master

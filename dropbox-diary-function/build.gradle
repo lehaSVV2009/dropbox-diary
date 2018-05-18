@@ -14,6 +14,7 @@ dependencies {
   compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
   compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
   compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5'
+  compile 'com.dropbox.core:dropbox-core-sdk:2.1.1'
 
   testCompile 'junit:junit:4.12'
 }

@@ -10,12 +10,13 @@ matrix:
     jdk: oraclejdk8
     script:
     - "./gradlew clean build"
-    deploy:
-    - provider: script
-      script: bash ./dropbox-diary-api/heroku_deploy.sh
-      skip_cleanup: true
-      on:
-        branch: master
+# Not used, cause it's too expensive for me to pay for spring-boot in GAE instance...
+#    deploy:
+#    - provider: script
+#      script: bash ./dropbox-diary-api/heroku_deploy.sh
+#      skip_cleanup: true
+#      on:
+#        branch: master
     - provider: releases
       api_key: "${GITHUB_API_KEY}"
       file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar

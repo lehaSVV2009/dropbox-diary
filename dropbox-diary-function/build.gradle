@@ -1,0 +1,31 @@
+apply plugin: 'java'
+
+repositories {
+  mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+  compileOnly 'org.projectlombok:lombok:1.16.20'
+  compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
+  compile 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+  compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+  compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
+  compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5'
+
+  testCompile 'junit:junit:4.12'
+}
+
+// http://docs.aws.amazon.com/lambda/latest/dg/create-deployment-pkg-zip-java.html
+task buildZip(type: Zip) {
+  baseName = "dropbox-diary-function"
+  from compileJava
+  from processResources
+  into('lib') {
+    from configurations.runtime
+  }
+}
+
+build.dependsOn buildZip

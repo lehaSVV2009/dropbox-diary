@@ -10,11 +10,13 @@ matrix:
     - provider: lambda
       function_name: dropbox-diary-function
       region: us-east-1
-      role: arn:aws:iam::377159598624:role/aws-lambda-deployer
+      role: arn:aws:iam::377159598624:role/aws-lambda-deployer # see https://docs.travis-ci.com/user/deployment/lambda/#AWS-permissions
       runtime: java8
       zip: dropbox-diary-function/build/distributions/dropbox-diary-function.zip
-      module_name: kadiary
-      handler_name: Main
+      module_name: kadiary # package name
+      handler_name: Main # class name
+      timeout: 60 # seconds
+      memory_size: 512 # MB
       skip_cleanup: true
       on:
         all_branches: true

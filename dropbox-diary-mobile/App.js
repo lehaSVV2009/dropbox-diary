@@ -1,6 +1,8 @@
 import React from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 
+import * as API from "./API";
+
 export default class App extends React.Component {
   state = {
     messages: [],
@@ -11,7 +13,7 @@ export default class App extends React.Component {
       messages: [
         {
           _id: 1,
-          text: "Hello developer",
+          text: "Hello! Any interesting story?",
           createdAt: new Date(),
           user: {
             _id: 2,
@@ -24,9 +26,18 @@ export default class App extends React.Component {
   }
 
   onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
+    if (messages.length === 0) {
+      return;
+    }
+    messages.forEach(message => {
+      API
+        .createNote(message.text)
+        .then(response => {
+          this.setState(previousState => ({
+            messages: GiftedChat.append(previousState.messages, message),
+          }));
+        })
+    })
   }
 
   render() {

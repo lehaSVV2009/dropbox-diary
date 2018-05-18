@@ -1,22 +1,25 @@
-sudo: required
-services:
-- docker
-before_install:
-- openssl aes-256-cbc -K $encrypted_5005aee41fbb_key -iv $encrypted_5005aee41fbb_iv
-  -in dropbox-diary-api/gae/client-secret.json.enc -out dropbox-diary-api/gae/client-secret.json -d
 matrix:
   include:
   - language: java
     jdk: oraclejdk8
     script:
     - "./gradlew clean build"
-# Not used, cause it's too expensive for me to pay for spring-boot in GAE instance...
-#    deploy:
-#    - provider: script
-#      script: bash ./dropbox-diary-api/heroku_deploy.sh
-#      skip_cleanup: true
-#      on:
-#        branch: master
+    deploy:
+
+    # Deploy Dropbox Diary function lib to AWS Lambda
+    - provider: lambda
+      function_name: dropbox-diary-function
+      region: us-east-1
+      role: arn:aws:iam::377159598624:role/aws-lambda-deployer
+      runtime: java8
+      zip: dropbox-diary-function/build/distributions/dropbox-diary-function.zip
+      module_name: kadiary
+      handler_name: Main
+      skip_cleanup: true
+      on:
+        all_branches: true
+
+    # Deploy Drobpox Diary desktop app to github releases
     - provider: releases
       api_key: "${GITHUB_API_KEY}"
       file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar

@@ -41,7 +41,7 @@ public class Main implements RequestStreamHandler {
           System.getenv(DROPBOX_CLIENT_ID),
           System.getenv(DROPBOX_ACCESS_TOKEN)
       );
-      context.getLogger().log("App Config: " + appConfig);
+      context.getLogger().log("Config: " + appConfig);
 
       // Process request
       val response = requestExecutor.apply(requestNote, appConfig);

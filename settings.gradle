@@ -1,2 +1,4 @@
 include 'dropbox-diary-api'
 include 'dropbox-diary-desktop'
+include 'dropbox-diary-function'
+

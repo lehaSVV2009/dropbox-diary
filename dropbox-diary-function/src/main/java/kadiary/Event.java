@@ -3,11 +3,11 @@ package kadiary;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RequestNote {
-  private final LocalDateTime date = LocalDateTime.now();
-  private String note;
+public class Event {
+  private String text;
+  private ZonedDateTime date;
 }

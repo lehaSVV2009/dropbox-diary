@@ -5,10 +5,12 @@ import static kadiary.Response.badRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -19,6 +21,7 @@ public class Main implements RequestStreamHandler {
 
   private static final String DROPBOX_CLIENT_ID = "DROPBOX_CLIENT_ID";
   private static final String DROPBOX_ACCESS_TOKEN = "DROPBOX_ACCESS_TOKEN";
+  private static final String DROPBOX_DIARY_PATH = "DROPBOX_DIARY_PATH";
 
   private final RequestExecutor requestExecutor = new RequestExecutor();
   private final ObjectMapper objectMapper =
@@ -32,19 +35,22 @@ public class Main implements RequestStreamHandler {
     try (val input = inputStream;
          val output = outputStream) {
 
-      // Read http request in format { "note": "123" }
-      val requestNote = objectMapper.readValue(input, RequestNote.class);
-      context.getLogger().log("Request: " + requestNote);
+      // Read http request in format
+      // [{ "text": "bla", "date": "2018-05-21T17:48:16.667Z" }, ...]
+      List<Event> request = objectMapper.readValue(input, new TypeReference<List<Event>>() {});
+      context.getLogger().log("Request: " + request);
 
       // Read all required env variables
-      val appConfig = new AppConfig(
-          System.getenv(DROPBOX_CLIENT_ID),
-          System.getenv(DROPBOX_ACCESS_TOKEN)
-      );
+      val env = System.getenv();
+      val appConfig = AppContext.builder()
+          .dropboxClientId(env.get(DROPBOX_CLIENT_ID))
+          .dropboxClientSecret(env.get(DROPBOX_ACCESS_TOKEN))
+          .dropboxDiaryPath(env.get(DROPBOX_DIARY_PATH))
+          .build();
       context.getLogger().log("Config: " + appConfig);
 
       // Process request
-      val response = requestExecutor.apply(requestNote, appConfig);
+      val response = requestExecutor.apply(request, appConfig);
 
       // Write http response in format { "note": "123" }
       context.getLogger().log("Response: " + response);

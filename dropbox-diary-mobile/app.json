@@ -1,5 +1,9 @@
 {
   "expo": {
-    "sdkVersion": "26.0.0"
+    "name": "dropbox-diary-mobile",
+    "version": "1.0.0",
+    "sdkVersion": "26.0.0",
+    "slug": "dropbox-diary-mobile",
+    "privacy": "unlisted"
   }
 }

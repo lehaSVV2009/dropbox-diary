@@ -1,5 +1,4 @@
 import { AsyncStorage } from "react-native"
-import store from "react-native-simple-store"
 
 export const readOfflineMessages = () =>
   AsyncStorage

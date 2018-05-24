@@ -14,26 +14,33 @@ export default class App extends React.Component {
     OfflineStore
       .readOfflineMessages()
       .then(messages => {
+        // Add offline messages to UI
+        this.addMessages(messages)
+
+        // Try to create new diary events by API
         API
           .createEvents(messages)
           .then(response => {
             if (!API.isEventCreated(response)) {
               throw new Error(`API request failed... ${response.message}`)
             }
+
             // Show saved messages on UI
-            const savedMessages = messages.map(message => ({ sent: true, received: true, ...message }))
-            this.addMessages(savedMessages)
+            const savedMessages = messages.map(message => {
+              message.received = true
+              return message
+            })
+            this.updateMessages(savedMessages)
     
             // Delete all already saved by API message from offline store
             OfflineStore.deleteOfflineMessages()
           })
           .catch(error => {
-            console.log(`Messages ${messages} are still in Offline store`)
-            this.addMessages(messages)
+            console.log(`Messages ${messages} are still in Offline store: ${error}`)
           })
       })
       .catch(error => {
-        console.log("No offline messages found")
+        console.log(`Offline messages read error: ${error}`)
       })
   }
 
@@ -61,7 +68,6 @@ export default class App extends React.Component {
         OfflineStore
           .createOfflineMessages(offlineMessages)
           .then(() => {
-            console.log("Created offline messages " + offlineMessages)
             this.updateMessages(offlineMessages)
           })
       })
@@ -92,8 +98,8 @@ export default class App extends React.Component {
     messages.forEach(message => {
       this.setState(previousState => ({
         messages: previousState.messages.map(
-          oldMessage => oldMessage._id === message._id ? message : oldMessage)
-      }))  
+          oldMessage => oldMessage._id == message._id ? message : oldMessage)
+      }))
     })
 
   render() {

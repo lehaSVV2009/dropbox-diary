@@ -1,9 +1,15 @@
 {
   "expo": {
     "name": "dropbox-diary-mobile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "sdkVersion": "26.0.0",
     "slug": "dropbox-diary-mobile",
-    "privacy": "unlisted"
+    "privacy": "unlisted",
+    "ios": {
+      "bundleIdentifier": "com.kadiary"
+    },
+    "android": {
+      "package": "com.kadiary"
+    }
   }
 }

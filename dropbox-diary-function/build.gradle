@@ -10,7 +10,6 @@ targetCompatibility = 1.8
 dependencies {
   compile project(':dropbox-diary-model')
   compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
-  compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5'
   compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5'
   compile 'com.dropbox.core:dropbox-core-sdk:2.1.1'
 

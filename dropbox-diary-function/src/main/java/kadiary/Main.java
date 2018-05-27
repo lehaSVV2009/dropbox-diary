@@ -1,6 +1,6 @@
 package kadiary;
 
-import static kadiary.Response.badRequest;
+import static kadiary.FunctionResponse.badRequest;
 
 import java.io.IOException;
 import java.io.InputStream;

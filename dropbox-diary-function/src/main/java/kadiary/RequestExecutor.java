@@ -1,8 +1,8 @@
 package kadiary;
 
-import static kadiary.Response.badRequest;
-import static kadiary.Response.created;
-import static kadiary.Response.dropboxError;
+import static kadiary.FunctionResponse.badRequest;
+import static kadiary.FunctionResponse.created;
+import static kadiary.FunctionResponse.dropboxError;
 
 import com.dropbox.core.DbxException;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 @RequiredArgsConstructor
-public class RequestExecutor implements BiFunction<List<Event>, AppContext, Response> {
+public class RequestExecutor implements BiFunction<List<Event>, AppContext, FunctionResponse> {
 
   private final DiaryService diaryService = new DiaryService();
 
   @Override
-  public Response apply(List<Event> newEvents, AppContext appContext) {
+  public FunctionResponse apply(List<Event> newEvents, AppContext appContext) {
     // Return HTTP 400 if response format is invalid
     if (newEvents == null || newEvents.isEmpty()) {
       return badRequest();

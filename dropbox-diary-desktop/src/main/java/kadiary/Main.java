@@ -1,30 +1,30 @@
 package kadiary;
 
-import static kadiary.BuildConfig.DEFAULT_DIARY_PATH;
-import static kadiary.BuildConfig.DEFAULT_DROPBOX_ACCESS_TOKEN;
-import static kadiary.BuildConfig.DEFAULT_DROPBOX_CLIENT_ID;
+import static java.util.Collections.singletonList;
+import static kadiary.BuildConfig.DEFAULT_API_KEY;
+import static kadiary.BuildConfig.DEFAULT_API_URL;
 
-import com.dropbox.core.DbxDownloader;
-import com.dropbox.core.DbxException;
-import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.util.IOUtil;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.files.WriteMode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
+import okhttp3.OkHttpClient;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
 
-  private static final String DROPBOX_CLIENT_ID = System.getProperty("dropbox-client-id", DEFAULT_DROPBOX_CLIENT_ID);
-  private static final String DROPBOX_ACCESS_TOKEN = System.getProperty("dropbox-access-token", DEFAULT_DROPBOX_ACCESS_TOKEN);
-  private static final String DIARY_PATH = System.getProperty("diary-path", DEFAULT_DIARY_PATH);
+  private static final String API_URL = System.getProperty("api-url", DEFAULT_API_URL);
+  private static final String API_KEY = System.getProperty("aip-key", DEFAULT_API_KEY);
 
   public static void main(String args[]) throws Exception {
     launch(args);
@@ -38,10 +38,10 @@ public class Main extends Application {
     dialog.setContentText("What did you do yesterday?");
     dialog.getEditor().setMinWidth(500);
 
-    dialog.showAndWait().ifPresent(event -> {
+    dialog.showAndWait().ifPresent(message -> {
       try {
-        Main.updateInDropBox(event);
-      } catch (Exception e) {
+        createEvent(message);
+      } catch (Throwable e) {
         new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
       }
     });
@@ -49,31 +49,47 @@ public class Main extends Application {
     stop();
   }
 
-  private static void updateInDropBox(String event) throws IOException, DbxException {
-    // Create Dropbox client
-    // gradle-build-config plugin is used to retrieve dropbox client id, token and path from system env
-    DbxRequestConfig config = new DbxRequestConfig(DROPBOX_CLIENT_ID);
-    DbxClientV2 client = new DbxClientV2(config, DROPBOX_ACCESS_TOKEN);
+  private static void createEvent(String message) throws IOException, RuntimeException {
+    // Create Diary API client
+    // gradle-build-config plugin is used to retrieve api url and api key
+    DiaryApi api = new Retrofit.Builder()
+        .baseUrl(API_URL)
+        .addConverterFactory(JacksonConverterFactory.create(
+            // allow to send "2014-12-20T02:30" instead of { date: "20", month: "December", ... }
+            new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)))
+        .client(
+            // not fail after 5 seconds read waiting
+            new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build())
+        .build()
+        .create(DiaryApi.class);
 
-    // Get diary file from Dropbox
-    String diary;
-    try (DbxDownloader<FileMetadata> downloader = client.files().download(DIARY_PATH)) {
-      diary = IOUtil.toUtf8String(downloader.getInputStream());
+    // Build diary event model
+    Event event = new Event(message, ZonedDateTime.now());
+
+    // Save diary event by API
+    Response<FunctionResponse> response;
+    try {
+      response = api.createEvents(singletonList(event), API_KEY).execute();
+    } catch (Throwable throwable) {
+      throw new RuntimeException("Network error occurred", throwable);
     }
 
-    if (diary == null || !diary.endsWith("</diary>")) {
-      throw new DbxException("Diary is in incorrect format!");
+    // Fail if response and its body are not successful
+    if (!response.isSuccessful()) {
+      throw new RuntimeException("Response is not successful. " + response.code());
     }
-
-    // Add new item to diary
-    diary = diary.replace(
-        "</diary>",
-        "<event><date>" + LocalDateTime.now() + "</date><text>" + event + "</text></event></diary>"
-    );
-
-    // Upload file to Dropbox
-    try (InputStream in = new ByteArrayInputStream(diary.getBytes(StandardCharsets.UTF_8))) {
-      client.files().uploadBuilder(DIARY_PATH).withMode(WriteMode.OVERWRITE).uploadAndFinish(in);
+    FunctionResponse functionResponse = response.body();
+    if (functionResponse == null) {
+      throw new RuntimeException("Response doesn't contain body. " + response.code());
+    }
+    if (functionResponse.getBody() == null || !(functionResponse.getBody() instanceof List)) {
+      throw new RuntimeException("Function response body is invalid. " + functionResponse);
     }
   }
 }

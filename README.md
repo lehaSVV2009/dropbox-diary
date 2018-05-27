@@ -116,11 +116,11 @@ git push origin master
 * [Gradle](https://gradle.org/) - Dependency Management
 * [Travis](https://travis-ci.org/) - Simple CI Tool integrated with Github
 * [Dropbox Client](https://github.com/dropbox/dropbox-sdk-java) - Java library to access Dropbox's HTTP-based Core API v2
-* [AWS Lambda Java Function](https://docs.aws.amazon.com/lambda/latest/dg/java-handler-io-type-stream.html)
-* [Retrofit](http://square.github.io/retrofit/)
-* [JavaFX](http://www.oracle.com/technetwork/java/javase/overview/javafx-overview-2158620.html)
-* [React Native Gifted Chat](https://github.com/FaridSafi/react-native-gifted-chat)
+* [AWS Lambda Java Function](https://docs.aws.amazon.com/lambda/latest/dg/java-handler-io-type-stream.html) - Serverless compute
+* [Retrofit](http://square.github.io/retrofit/) - Java http client
+* [JavaFX](http://www.oracle.com/technetwork/java/javase/overview/javafx-overview-2158620.html) - Java Desktop UI
 * [Create React Native App](https://github.com/react-community/create-react-native-app) - Boilerplate to create react native mobile apps
+* [React Native Gifted Chat](https://github.com/FaridSafi/react-native-gifted-chat) - Chat UI for React Native
 
 ## Contributing
 
@@ -137,3 +137,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+Great thanks [Katerina Draenkova](https://github.com/KaterinaDraenkova) and [Pavel Evleev](https://github.com/PavelEvleev) for inspiration!

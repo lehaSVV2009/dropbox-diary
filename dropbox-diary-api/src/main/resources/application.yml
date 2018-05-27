@@ -1,4 +1,0 @@
-# Spring app configurations
-spring:
-  data:
-    mongodb.uri: mongodb://${MONGO_URL:localhost/kadiary} # database uri

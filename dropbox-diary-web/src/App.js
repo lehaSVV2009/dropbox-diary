@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Input, MessageList } from "react-chat-elements";
 
-import "react-chat-elements/dist/main.css";
+import Layout from "./Layout";
 
 export default class App extends Component {
   constructor() {
@@ -29,6 +29,8 @@ export default class App extends Component {
 
     // Clear text input
     this.refs.input.clear();
+
+    // TODO scroll to last element
   };
 
   createMessage = (text, position = "right") => ({
@@ -40,23 +42,26 @@ export default class App extends Component {
 
   render() {
     return (
-      <div>
-        <MessageList dataSource={this.state.messages} />
-        <Input
-          ref="input"
-          multiline
-          placeholder="Type a message..."
-          onChange={this.handleInputChange}
-          rightButtons={
-            <Button
-              color="white"
-              backgroundColor="black"
-              text="Send"
-              onClick={this.handleSendClick}
-            />
-          }
-        />
-      </div>
+      <Layout
+        center={<MessageList dataSource={this.state.messages} />}
+        bottom={
+          <Input
+            className="input"
+            ref="input"
+            multiline
+            placeholder="Type a message..."
+            onChange={this.handleInputChange}
+            rightButtons={
+              <Button
+                color="white"
+                backgroundColor="black"
+                text="Send"
+                onClick={this.handleSendClick}
+              />
+            }
+          />
+        }
+      />
     );
   }
 }

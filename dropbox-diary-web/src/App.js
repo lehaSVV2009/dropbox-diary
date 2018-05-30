@@ -1,14 +1,24 @@
 import React, { Component } from "react";
 import { Button, Input, MessageList } from "react-chat-elements";
 
+import * as API from "./API";
+
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      messages: [this.createMessage("Hello! Any interesting story?", "left")],
+      messages: [
+        this.buildMessage({
+          text: "Hello! Any interesting story?",
+          position: "left"
+        })
+      ],
       text: ""
     };
   }
+
+  // Message id counter
+  idCounter = 0;
 
   handleInputChange = ({ target: { value } }) => this.setState({ text: value });
 
@@ -25,8 +35,11 @@ export default class App extends Component {
       return;
     }
 
+    // Create UI message model
+    const message = this.buildMessage({ text, status: "waiting" });
+
     // Add new message to UI
-    messages.push(this.createMessage(text));
+    messages.push(message);
     this.setState(
       {
         text: "",
@@ -40,14 +53,45 @@ export default class App extends Component {
         this.refs.center.scrollTop = this.refs.center.scrollHeight;
       }
     );
+
+    // Create event by API
+    API.createEvents([
+      {
+        text: message.title,
+        createdAt: message.date
+      }
+    ])
+      .then(response => {
+        if (!API.isEventCreated(response)) {
+          throw new Error(`API request failed... ${response.message}`);
+        }
+
+        // Mark message as saved by API
+        this.updateMessage({ ...message, status: "received" });
+      })
+      .catch(error => {
+        // Mark message as saved in localstorage
+        this.updateMessage({ ...message, status: "sent" });
+      });
   };
 
-  createMessage = (text, position = "right") => ({
-    position,
+  buildMessage = ({ text, status, position }) => ({
+    id: this.idCounter++,
+    position: position || "right",
+    status,
     type: "text",
-    text,
+    title: text, // title, but not text cause text padding fails with status
+    titleColor: "black",
     date: new Date()
   });
+
+  updateMessage = message => {
+    this.setState(previousState => ({
+      messages: previousState.messages.map(
+        oldMessage => (oldMessage.id === message.id ? message : oldMessage)
+      )
+    }));
+  };
 
   render() {
     return (

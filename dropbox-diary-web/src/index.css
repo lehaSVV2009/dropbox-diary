@@ -21,9 +21,12 @@ body {
 .center {
   margin-bottom: 50px;
   overflow: auto;
-  max-height: 83vh;
+  height: 84vh;
 }
 
+/**
+ * Override existing input to have a border
+ */
 .rce-input {
   border: 1px solid;
 }
@@ -40,11 +43,13 @@ body {
 
 @media screen and (min-width: 576px) {
   /**
-   * Small indent for messages on table and desktop
+   * Small indent and border line for messages on table and desktop
    */
   .center {
     margin-top: 50px;
     margin-bottom: 100px;
+    border: 1px solid;
+    border-radius: 5px;
   }
   /**
    * Small indent for input on table and desktop

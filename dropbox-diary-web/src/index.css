@@ -1,19 +1,55 @@
+/**
+ * By default different browsers have different margins/paddings for window
+ */
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
 
+/**
+ * max-width + auto margin centers viewport
+ */
 .viewport {
+  margin: 0 auto;
+  max-width: 1010px;
 }
 
+/**
+ * margin-bottom allows messages to not go under the fixed input
+ */
 .center {
   margin-bottom: 50px;
+  overflow: auto;
+  max-height: 83vh;
 }
 
+.rce-input {
+  border: 1px solid;
+}
+
+/**
+ * Allow input to be fixed and highlighted in the bottom
+ */
 .bottom {
   position: fixed;
   bottom: 0px;
   width: 100%;
-  border: double;
+  max-width: 1010px;
+}
+
+@media screen and (min-width: 576px) {
+  /**
+   * Small indent for messages on table and desktop
+   */
+  .center {
+    margin-top: 50px;
+    margin-bottom: 100px;
+  }
+  /**
+   * Small indent for input on table and desktop
+   */
+  .bottom {
+    margin-bottom: 50px;
+  }
 }

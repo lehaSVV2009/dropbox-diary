@@ -14,6 +14,13 @@ export default class App extends Component {
 
   handleInputChange = ({ target: { value } }) => this.setState({ text: value });
 
+  handleInputKeyDown = event => {
+    // on Shift+Enter
+    if (event.keyCode === 13 && event.shiftKey) {
+      this.handleSendClick();
+    }
+  };
+
   handleSendClick = () => {
     const { text, messages } = this.state;
     if (!text) {
@@ -51,6 +58,7 @@ export default class App extends Component {
             multiline
             placeholder="Type a message..."
             onChange={this.handleInputChange}
+            onKeyDown={this.handleInputKeyDown}
             rightButtons={
               <Button
                 color="white"

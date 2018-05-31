@@ -46,7 +46,7 @@ matrix:
       - cd ..
     deploy:
       provider: pages
-      local_dir: build
+      local_dir: dropbox-diary-web/build
       github_token: $GITHUB_API_KEY
       skip_cleanup: true
       on:

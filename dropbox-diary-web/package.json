@@ -1,6 +1,6 @@
 {
   "name": "dropbox-diary-web",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",

@@ -1,9 +1,8 @@
 import axios from "axios"
-
-import { API_KEY, API_URL } from "./env"
+import { REACT_APP_API_KEY, REACT_APP_API_URL } from "react-native-dotenv"
 
 const client = axios.create({
-  baseURL: API_URL,
+  baseURL: REACT_APP_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,7 +10,7 @@ const client = axios.create({
 })
 
 client.interceptors.request.use(config => {
-  config.headers["x-api-key"] = API_KEY
+  config.headers["x-api-key"] = REACT_APP_API_KEY
   return config
 })
 

@@ -1,5 +1,6 @@
 matrix:
   include:
+
   - language: java
     jdk: oraclejdk8
     script:
@@ -19,13 +20,34 @@ matrix:
       memory_size: 512 # MB
       skip_cleanup: true
       on:
-        all_branches: true
+        condition: git diff --name-only HEAD^ | grep "dropbox-diary-function"
 
     # Deploy Drobpox Diary desktop app to github releases
     - provider: releases
-      api_key: "${GITHUB_API_KEY}"
+      api_key: $GITHUB_API_KEY
       file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar
       skip_cleanup: true
       on:
-        all_branches: true
+        condition: git diff --name-only HEAD^ | grep "dropbox-diary-desktop"
         tags: true
+
+  - language: node_js
+    node_js:
+      - "8.0.0"
+    before_install:
+      - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.2.1
+      - export PATH=$HOME/.yarn/bin:$PATH
+    cache:
+      yarn: true
+    script:
+      - cd dropbox-diary-web
+      - yarn
+      - yarn build
+      - cd ..
+    deploy:
+      provider: pages
+      local_dir: build
+      github_token: $GITHUB_API_KEY
+      skip_cleanup: true
+      on:
+        condition: git diff --name-only HEAD^ | grep "dropbox-diary-web"

@@ -2,6 +2,7 @@
   "name": "dropbox-diary-web",
   "version": "1.0.1",
   "private": true,
+  "homepage": "/dropbox-diary",
   "dependencies": {
     "axios": "^0.18.0",
     "react": "^16.4.0",

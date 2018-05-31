@@ -20,7 +20,7 @@ matrix:
       memory_size: 512 # MB
       skip_cleanup: true
       on:
-        condition: git diff --name-only HEAD^ | grep "dropbox-diary-function"
+        condition: git diff --name-only $TRAVIS_COMMIT_RANGE|grep "dropbox-diary-function"
 
     # Deploy Drobpox Diary desktop app to github releases
     - provider: releases
@@ -28,7 +28,7 @@ matrix:
       file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar
       skip_cleanup: true
       on:
-        condition: git diff --name-only HEAD^ | grep "dropbox-diary-desktop"
+        condition: git diff --name-only $TRAVIS_COMMIT_RANGE|grep "dropbox-diary-desktop"
         tags: true
 
   - language: node_js
@@ -49,5 +49,5 @@ matrix:
       local_dir: dropbox-diary-web/build
       github_token: $GITHUB_API_KEY
       skip_cleanup: true
-#      on:
-#        condition: git diff --name-only HEAD^ | grep "dropbox-diary-web"
+      on:
+        condition: git diff --name-only $TRAVIS_COMMIT_RANGE|grep "dropbox-diary-web"

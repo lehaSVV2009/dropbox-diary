@@ -1,3 +1,9 @@
+env:
+  - CHANGED_FUNCTION = $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "dropbox-diary-function")
+  - CHANGED_DESKTOP = $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "dropbox-diary-desktop")
+  - CHANGED_MOBILE = $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "dropbox-diary-mobile")
+  - CHANGED_WEB = $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "dropbox-diary-web")
+
 matrix:
   include:
 
@@ -20,7 +26,7 @@ matrix:
       memory_size: 512 # MB
       skip_cleanup: true
       on:
-        condition: git diff --name-only $TRAVIS_COMMIT_RANGE|grep "dropbox-diary-function"
+        condition: env(CHANGED_FUNCTION) IS present
 
     # Deploy Drobpox Diary desktop app to github releases
     - provider: releases
@@ -28,7 +34,7 @@ matrix:
       file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar
       skip_cleanup: true
       on:
-        condition: git diff --name-only $TRAVIS_COMMIT_RANGE|grep "dropbox-diary-desktop"
+        condition: env(CHANGED_DESKTOP) IS present
         tags: true
 
   - language: node_js
@@ -50,4 +56,4 @@ matrix:
       github_token: $GITHUB_API_KEY
       skip_cleanup: true
       on:
-        condition: git diff --name-only $TRAVIS_COMMIT_RANGE|grep "dropbox-diary-web"
+        condition: env(CHANGED_WEB) IS present

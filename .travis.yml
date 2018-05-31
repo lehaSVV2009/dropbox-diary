@@ -49,5 +49,5 @@ matrix:
       local_dir: dropbox-diary-web/build
       github_token: $GITHUB_API_KEY
       skip_cleanup: true
-      on:
-        condition: git diff --name-only HEAD^ | grep "dropbox-diary-web"
+#      on:
+#        condition: git diff --name-only HEAD^ | grep "dropbox-diary-web"

@@ -2,23 +2,60 @@ import React, { Component } from "react";
 import { Button, Input, MessageList } from "react-chat-elements";
 
 import * as API from "./API";
+import * as OfflineStore from "./OfflineStore";
 
 export default class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      messages: [
-        this.buildMessage({
-          text: "Hello! Any interesting story?",
-          position: "left"
-        })
-      ],
-      text: ""
-    };
-  }
+  state = {
+    messages: [],
+    text: ""
+  };
 
-  // Message id counter
-  idCounter = 0;
+  componentDidMount() {
+    this.addHelloMessage();
+
+    const offlineMessages = OfflineStore.readOfflineMessages();
+    if (offlineMessages.length === 0) {
+      console.log("No offline messages found");
+      return;
+    }
+
+    // Add localstorage messages to UI
+    this.addMessages(offlineMessages, () => {
+      this.scrollToLastMessage();
+    });
+
+    // Try to save localstorage messages by API
+    API.createEvents(
+      offlineMessages.map(message => ({
+        text: message.title,
+        createdAt: message.date
+      }))
+    )
+      .then(response => {
+        if (!API.isEventCreated(response)) {
+          throw new Error(`API request failed... ${response.message}`);
+        }
+
+        // Mark message as saved by API
+        this.updateMessages(
+          offlineMessages.map(message => ({
+            ...message,
+            status: "received"
+          }))
+        );
+
+        // Delete saved by API messages from localstorage
+        OfflineStore.deleteOfflineMessages();
+      })
+      .catch(error => {
+        // Failed to save offline messages by API (probably offline mode)
+        console.log(
+          `${
+            offlineMessages.length
+          } Messages are still in Offline store: ${error}`
+        );
+      });
+  }
 
   handleInputChange = ({ target: { value } }) => this.setState({ text: value });
 
@@ -30,7 +67,7 @@ export default class App extends Component {
   };
 
   handleSendClick = () => {
-    const { text, messages } = this.state;
+    const { text } = this.state;
     if (!text || !text.trim()) {
       return;
     }
@@ -39,20 +76,11 @@ export default class App extends Component {
     const message = this.buildMessage({ text, status: "waiting" });
 
     // Add new message to UI
-    messages.push(message);
-    this.setState(
-      {
-        text: "",
-        messages
-      },
-      () => {
-        // Clear text input
-        this.refs.input.clear();
-
-        // Scroll to last message
-        this.refs.center.scrollTop = this.refs.center.scrollHeight;
-      }
-    );
+    this.addMessages([message], () => {
+      // Clear text input
+      this.refs.input.clear();
+      this.scrollToLastMessage();
+    });
 
     // Create event by API
     API.createEvents([
@@ -67,16 +95,24 @@ export default class App extends Component {
         }
 
         // Mark message as saved by API
-        this.updateMessage({ ...message, status: "received" });
+        this.updateMessages([{ ...message, status: "received" }]);
       })
       .catch(error => {
-        // Mark message as saved in localstorage
-        this.updateMessage({ ...message, status: "sent" });
+        const offlineMessages = [{ ...message, status: "sent" }];
+        // Save failed messaged in localstorage
+        OfflineStore.createOfflineMessages(offlineMessages);
+        // Mark message as saved in localstorage on UI
+        this.updateMessages(offlineMessages);
       });
   };
 
+  scrollToLastMessage = () => {
+    // Scroll to last message
+    this.refs.center.scrollTop = this.refs.center.scrollHeight;
+  };
+
+  // Build message model
   buildMessage = ({ text, status, position }) => ({
-    id: this.idCounter++,
     position: position || "right",
     status,
     type: "text",
@@ -85,13 +121,34 @@ export default class App extends Component {
     date: new Date()
   });
 
-  updateMessage = message => {
-    this.setState(previousState => ({
-      messages: previousState.messages.map(
-        oldMessage => (oldMessage.id === message.id ? message : oldMessage)
-      )
-    }));
-  };
+  // Add 'Hello' message to UI
+  addHelloMessage = () =>
+    this.addMessages([
+      this.buildMessage({
+        text: "Hello! Any interesting story?",
+        position: "left"
+      })
+    ]);
+
+  // Add messages to UI
+  addMessages = (messages, callback) =>
+    this.setState(
+      previousState => ({
+        messages: previousState.messages.concat(messages)
+      }),
+      callback
+    );
+
+  // Update messages in UI (e.g. messages ticks)
+  updateMessages = messages =>
+    messages.forEach(message => {
+      this.setState(previousState => ({
+        messages: previousState.messages.map(
+          oldMessage =>
+            oldMessage.date === message.date ? message : oldMessage
+        )
+      }));
+    });
 
   render() {
     return (

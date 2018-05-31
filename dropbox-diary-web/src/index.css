@@ -9,6 +9,8 @@ body {
 
 /**
  * max-width + auto margin centers viewport
+ * TODO it's better viewport to contain both center and bottom, but not position:fixed bottom 
+ * (but it's tricky for expanded textarea) 
  */
 .viewport {
   margin: 0 auto;
@@ -46,15 +48,21 @@ body {
    * Small indent and border line for messages on table and desktop
    */
   .center {
-    margin-top: 50px;
-    margin-bottom: 100px;
+    margin: 50px 10px 100px 10px;
     border: 1px solid;
     border-radius: 5px;
   }
+
   /**
    * Small indent for input on table and desktop
    */
   .bottom {
     margin-bottom: 50px;
+  }
+  .rce-input {
+    margin-left: 10px;
+  }
+  .rce-buttons {
+    margin-right: 10px;
   }
 }

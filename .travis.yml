@@ -4,6 +4,7 @@ matrix:
   - language: java
     jdk: oraclejdk8
     before_install:
+      # Check if sub-folder changed
       - CHANGED_FUNCTION=$(git diff --name-only $TRAVIS_COMMIT_RANGE -- dropbox-diary-function/)
       - CHANGED_DESKTOP=$(git diff --name-only $TRAVIS_COMMIT_RANGE -- dropbox-diary-desktop/)
     script:
@@ -38,8 +39,13 @@ matrix:
     node_js:
       - "8.0.0"
     before_install:
+      # Check if sub-folder changed
       - CHANGED_MOBILE=$(git diff --name-only $TRAVIS_COMMIT_RANGE -- dropbox-diary-mobile/)
       - CHANGED_WEB=$(git diff --name-only $TRAVIS_COMMIT_RANGE -- dropbox-diary-web/)
+      # Add env variables to .env
+      - echo REACT_APP_API_URL=$API_URL$'\n'REACT_APP_API_KEY=$API_KEY > dropbox-diary-web/.env
+      - echo REACT_APP_API_URL=$API_URL$'\n'REACT_APP_API_KEY=$API_KEY > dropbox-diary-mobile/.env
+      # Install yarn
       - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.2.1
       - export PATH=$HOME/.yarn/bin:$PATH
     cache:

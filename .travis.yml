@@ -4,8 +4,8 @@ matrix:
   - language: java
     jdk: oraclejdk8
     script:
-      - CHANGED_FUNCTION=$(git diff --name-only HEAD^)
-      - CHANGED_DESKTOP=$(git diff --name-only HEAD^)
+      - CHANGED_FUNCTION=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
+      - CHANGED_DESKTOP=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
       - "echo ${CHANGED_FUNCTION}"
       - "echo ${CHANGED_DESKTOP}"
       - "./gradlew clean build"
@@ -44,8 +44,8 @@ matrix:
     cache:
       yarn: true
     script:
-      - CHANGED_MOBILE=$(git diff --name-only HEAD^)
-      - CHANGED_WEB=$(git diff --name-only HEAD^)
+      - CHANGED_MOBILE=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
+      - CHANGED_WEB=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
       - cd dropbox-diary-web
       - yarn
       - yarn build

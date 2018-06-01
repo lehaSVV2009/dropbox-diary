@@ -107,7 +107,6 @@ export default class App extends Component {
   };
 
   scrollToLastMessage = () => {
-    // Scroll to last message
     this.refs.center.scrollTop = this.refs.center.scrollHeight;
   };
 
@@ -158,7 +157,6 @@ export default class App extends Component {
         </div>
         <div className="bottom">
           <Input
-            className="input"
             ref="input"
             multiline
             placeholder="Type a message..."

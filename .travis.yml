@@ -4,8 +4,8 @@ matrix:
   - language: java
     jdk: oraclejdk8
     script:
-      - CHANGED_FUNCTION=$(git diff --name-only HEAD^ | grep 'dropbox-diary-function')
-      - CHANGED_DESKTOP=$(git diff --name-only HEAD^ | grep 'dropbox-diary-desktop')
+      - CHANGED_FUNCTION=$(git diff --name-only HEAD^)
+      - CHANGED_DESKTOP=$(git diff --name-only HEAD^)
       - "echo ${CHANGED_FUNCTION}"
       - "echo ${CHANGED_DESKTOP}"
       - "./gradlew clean build"
@@ -44,8 +44,8 @@ matrix:
     cache:
       yarn: true
     script:
-      - CHANGED_MOBILE = $(git diff --name-only HEAD^ | grep 'dropbox-diary-mobile')
-      - CHANGED_WEB = $(git diff --name-only HEAD^ | grep 'dropbox-diary-web')
+      - CHANGED_MOBILE=$(git diff --name-only HEAD^)
+      - CHANGED_WEB=$(git diff --name-only HEAD^)
       - cd dropbox-diary-web
       - yarn
       - yarn build

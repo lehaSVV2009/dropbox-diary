@@ -4,7 +4,7 @@
     "version": "1.0.2",
     "sdkVersion": "26.0.0",
     "slug": "dropbox-diary-mobile",
-    "icon": "./assets/icons/app.ico",
+    "icon": "./assets/icons/favicon.ico",
     "privacy": "unlisted",
     "ios": {
       "bundleIdentifier": "com.kadiary"

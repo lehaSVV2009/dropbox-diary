@@ -7,7 +7,9 @@ matrix:
       - CHANGED_FUNCTION = $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "dropbox-diary-function")
       - CHANGED_DESKTOP = $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep "dropbox-diary-desktop")
     script:
-    - "./gradlew clean build"
+      - "./gradlew clean build"
+      - "echo ${CHANGED_FUNCTION}"
+      - "echo ${CHANGED_DESKTOP}"
     deploy:
 
     # Deploy Dropbox Diary function lib to AWS Lambda
@@ -31,7 +33,6 @@ matrix:
       file: dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar
       skip_cleanup: true
       on:
-        condition: env(CHANGED_DESKTOP) IS present
         tags: true
 
   - language: node_js
@@ -50,6 +51,8 @@ matrix:
       - yarn
       - yarn build
       - cd ..
+      - "echo ${CHANGED_MOBILE}"
+      - "echo ${CHANGED_WEB}"
     deploy:
       provider: pages
       local_dir: dropbox-diary-web/build

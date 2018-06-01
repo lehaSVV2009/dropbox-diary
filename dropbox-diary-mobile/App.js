@@ -1,5 +1,7 @@
 import React from "react"
 import { GiftedChat } from "react-native-gifted-chat"
+import KeyboardSpacer from "react-native-keyboard-spacer"
+import { Platform, View } from "react-native";
 
 import * as API from "./API"
 import * as OfflineStore from "./OfflineStore"
@@ -104,13 +106,18 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={this.handleSend}
-        user={{
-          _id: 1,
-        }}
-      />
+      <View style={{ flex: 1 }}>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={this.handleSend}
+          user={{
+            _id: 1,
+          }}
+        />
+        {
+          Platform.OS === 'android' && <KeyboardSpacer />
+        }
+      </View>
     )
   }
 }

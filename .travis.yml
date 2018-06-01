@@ -56,9 +56,18 @@ matrix:
       - yarn build
       - cd ..
     deploy:
-      provider: pages
+
+    # Deploy Dropbox Diary web to github pages
+    - provider: pages
       local_dir: dropbox-diary-web/build
       github_token: $GITHUB_API_KEY
       skip_cleanup: true
       on:
         condition: $CHANGED_WEB
+
+    # Deploy Dropbox Diary mobile to Expo
+    - provider: script
+      script: cd dropbox-diary-mobile && exp login -u $EXPO_USERNAME -p $EXPO_PASSWORD && exp publish && cd ..
+      skip_cleanup: true
+      on:
+        condition: $CHANGED_MOBILE

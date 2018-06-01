@@ -15,7 +15,7 @@ export default class App extends Component {
 
     const offlineMessages = OfflineStore.readOfflineMessages();
     if (offlineMessages.length === 0) {
-      console.log("No offline messages found");
+      console.log("No offline messages found...");
       return;
     }
 

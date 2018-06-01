@@ -73,7 +73,7 @@ matrix:
 
     # Deploy Dropbox Diary mobile to Expo
     - provider: script
-      script: cd dropbox-diary-mobile && exp login -u $EXPO_USERNAME -p $EXPO_PASSWORD && exp publish && cd ..
+      script: cd dropbox-diary-mobile && yarn global add exp && exp login -u $EXPO_USERNAME -p $EXPO_PASSWORD && exp publish && cd ..
       skip_cleanup: true
       on:
         condition: $CHANGED_MOBILE

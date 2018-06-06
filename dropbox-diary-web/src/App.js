@@ -32,11 +32,6 @@ export default class App extends Component {
       }))
     )
       .then(response => {
-        // TODO move to createEvents = ...then
-        if (!API.isEventCreated(response)) {
-          throw new Error(`API request failed... ${response.message}`);
-        }
-
         // Mark message as saved by API
         this.updateMessages(
           offlineMessages.map(message => ({
@@ -96,11 +91,6 @@ export default class App extends Component {
       }
     ])
       .then(response => {
-        // TODO move to createEvents = ...then
-        if (!API.isEventCreated(response)) {
-          throw new Error(`API request failed... ${response.message}`);
-        }
-
         // Mark message as saved by API
         this.updateMessages([{ ...message, status: "received" }]);
       })

@@ -15,4 +15,8 @@ public class AppContext {
   @NonNull
   private String dropboxClientSecret;
   private String dropboxDiaryPath;
+
+  public String getDropboxDiaryPath() {
+    return dropboxDiaryPath == null ? DEFAULT_DIARY_PATH : dropboxDiaryPath;
+  }
 }

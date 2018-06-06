@@ -5,26 +5,28 @@ import static kadiary.FunctionResponse.created;
 import static kadiary.FunctionResponse.dropboxError;
 
 import com.dropbox.core.DbxException;
-import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
-@RequiredArgsConstructor
-public class RequestExecutor implements BiFunction<List<Event>, AppContext, FunctionResponse> {
+public class RequestExecutor implements Function<List<Event>, FunctionResponse> {
 
-  private final DiaryService diaryService = new DiaryService();
+  private final DiaryService diaryService;
+
+  public RequestExecutor(AppContext appContext) {
+    this.diaryService = new DiaryService(new DiaryRepositoryImpl(appContext));
+  }
 
   @Override
-  public FunctionResponse apply(List<Event> newEvents, AppContext appContext) {
+  public FunctionResponse apply(List<Event> newEvents) {
     // Return HTTP 400 if response format is invalid
     if (newEvents == null || newEvents.isEmpty()) {
       return badRequest();
     }
 
     try {
-      diaryService.addEvents(newEvents, appContext);
+      diaryService.addEvents(newEvents);
     } catch (DbxException | IOException e) {
       // Return HTTP 500 if dropbox update failed
       return dropboxError();

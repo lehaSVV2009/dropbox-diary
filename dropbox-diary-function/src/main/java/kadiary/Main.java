@@ -23,7 +23,6 @@ public class Main implements RequestStreamHandler {
   private static final String DROPBOX_ACCESS_TOKEN = "DROPBOX_ACCESS_TOKEN";
   private static final String DROPBOX_DIARY_PATH = "DROPBOX_DIARY_PATH";
 
-  private final RequestExecutor requestExecutor = new RequestExecutor();
   private final ObjectMapper objectMapper =
       new ObjectMapper()
           // allow to return "2014-12-20T02:30" instead of { date: "12", month: "December", ... }
@@ -50,7 +49,7 @@ public class Main implements RequestStreamHandler {
       context.getLogger().log("Config: " + appConfig);
 
       // Process request
-      val response = requestExecutor.apply(request, appConfig);
+      val response = new RequestExecutor(appConfig).apply(request);
 
       // Write http response in format { "note": "123" }
       context.getLogger().log("Response: " + response);

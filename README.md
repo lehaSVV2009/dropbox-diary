@@ -74,32 +74,59 @@ echo '[{ "text":  "bla bla", "date": "2018-05-21T17:48:16.667Z" }]' | http post 
 java -jar dropbox-diary-desktop/build/libs/dropbox-diary-desktop.jar
 ```
 
-TODO [Little demo](little-demo.png)
-
 ### Installing React Native mobile app
 
-1. Add env.js file to the root of dropbox-diary-mobile folder:
+1. Go to mobile sub-folder
 ```
-export const API_KEY = "MY_API_KEY"
-export const API_URL = "https://MY_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com"
+cd dropbox-diary-mobile
 ```
 
-2. Install dependencies
+2. Add .env file to the root of dropbox-diary-mobile folder:
+```
+API_KEY=MY_API_KEY
+API_URL=https://MY_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com
+```
+
+3. Install dependencies
 ```
 yarn
 ```
 
-3. Run application by [Expo](https://expo.io/) (and issue generated url in browser)
+4. Run application by [Expo](https://expo.io/) (and issue generated url in browser)
 
-3.1. Install Expo client on your mobile (IOS/Android)
+4.1. Install Expo client on your mobile (IOS/Android)
 
-3.2. Run
+4.2. Run
 
 ```
 yarn start
 ```
 
-3.3. Issue generated url like `exp://172.20.10.8:19000` in terminal in your mobile browser
+4.3. Issue generated url like `exp://172.20.10.8:19000` in terminal in your mobile browser
+
+### Installing React web app
+
+1. Go to web sub-folder
+```
+cd dropbox-diary-web
+```
+
+2. Add .env file to the root of dropbox-diary-web folder:
+```
+API_KEY=MY_API_KEY
+API_URL=https://MY_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com
+```
+
+3. Install dependencies
+```
+yarn
+```
+
+4. Run application
+
+```
+yarn start
+```
 
 ## Deployment
 

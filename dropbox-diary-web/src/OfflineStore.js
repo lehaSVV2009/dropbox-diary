@@ -1,3 +1,6 @@
+//
+// Messages, stored in localstorage until app is offline
+//
 export const readOfflineMessages = () => {
   const messagesString = localStorage.getItem("messages");
   if (!messagesString) {
@@ -41,3 +44,13 @@ export const createOfflineMessages = messages => {
 };
 
 export const deleteOfflineMessages = () => localStorage.removeItem("messages");
+
+//
+// Saved current text input value
+//
+export const setLatestTextValue = text =>
+  localStorage.setItem("latest_text_value", text);
+export const deleteLatestTextValue = () =>
+  localStorage.removeItem("latest_text_value");
+export const readLatestTextValue = () =>
+  localStorage.getItem("latest_text_value");

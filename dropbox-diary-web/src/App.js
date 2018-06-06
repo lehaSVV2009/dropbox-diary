@@ -7,7 +7,7 @@ import * as OfflineStore from "./OfflineStore";
 export default class App extends Component {
   state = {
     messages: [],
-    text: ""
+    text: OfflineStore.readLatestTextValue() || ""
   };
 
   componentDidMount() {
@@ -32,6 +32,7 @@ export default class App extends Component {
       }))
     )
       .then(response => {
+        // TODO move to createEvents = ...then
         if (!API.isEventCreated(response)) {
           throw new Error(`API request failed... ${response.message}`);
         }
@@ -57,7 +58,10 @@ export default class App extends Component {
       });
   }
 
-  handleInputChange = ({ target: { value } }) => this.setState({ text: value });
+  handleInputChange = ({ target: { value } }) => {
+    this.setState({ text: value });
+    OfflineStore.setLatestTextValue(value);
+  };
 
   handleInputKeyUp = event => {
     // Send message on Enter. Shift+Enter will not send message but add next line
@@ -80,6 +84,8 @@ export default class App extends Component {
       // Clear text input
       this.refs.input.clear();
       this.scrollToLastMessage();
+      // Delete saved text input value
+      OfflineStore.deleteLatestTextValue();
     });
 
     // Create event by API
@@ -90,6 +96,7 @@ export default class App extends Component {
       }
     ])
       .then(response => {
+        // TODO move to createEvents = ...then
         if (!API.isEventCreated(response)) {
           throw new Error(`API request failed... ${response.message}`);
         }
@@ -159,6 +166,7 @@ export default class App extends Component {
           <Input
             ref="input"
             multiline
+            defaultValue={this.state.text}
             placeholder="Type a message..."
             onChange={this.handleInputChange}
             onKeyUp={this.handleInputKeyUp}
